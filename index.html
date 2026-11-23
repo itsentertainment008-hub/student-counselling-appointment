@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindCare – Student Counselling &amp; Wellbeing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <style>
+    /* =====================================================
+       CSS VARIABLES — LIGHT & DARK THEME SUPPORT
+       ===================================================== */
+    :root {
+      --primary: steelblue;
+      --primary-dark: midnightblue;
+      --secondary: aliceblue;
+      --accent: coral;
+      --accent-hover: chocolate;
+      --text: darkslategray;
+      --muted: slategray;
+      --bg-white: white;
+      --bg-light: ghostwhite;
+      --sidebar-bg: midnightblue;
+      --border: lightsteelblue;
+      --border-soft: gainsboro;
+      --success: seagreen;
+      --success-bg: honeydew;
+      --warning: goldenrod;
+      --danger: tomato;
+      --danger-bg: mistyrose;
+      --teal: teal;
+      --purple: mediumpurple;
+      --radius-btn: 12px;
+      --radius-card: 16px;
+      --font-heading: 'Poppins', sans-serif;
+      --font-body: 'Nunito', sans-serif;
+      --sidebar-w: 240px;
+      --hero-bg: linear-gradient(170deg, aliceblue 0%, ghostwhite 100%);
+      --card-shadow: 0 6px 20px gainsboro;
+      --card-shadow-hover: 0 12px 28px lightsteelblue;
+      --input-bg: white;
+      --chip-bg: ghostwhite;
+    }
+
+    /* Dark Mode Theme Overrides */
+    [data-theme="dark"] {
+      --primary: #4fa3d1;
+      --primary-dark: #0f172a;
+      --secondary: #1e293b;
+      --accent: #ff7f50;
+      --accent-hover: #ff6347;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --bg-white: #1e293b;
+      --bg-light: #0f172a;
+      --sidebar-bg: #090d16;
+      --border: #334155;
+      --border-soft: #334155;
+      --success: #34d399;
+      --success-bg: #064e3b;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --danger-bg: #450a0a;
+      --teal: #2dd4bf;
+      --purple: #c084fc;
+      --hero-bg: linear-gradient(170deg, #1e293b 0%, #0f172a 100%);
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      --card-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.6);
+      --input-bg: #1e293b;
+      --chip-bg: #0f172a;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: var(--font-body); line-height: 1.6; color: var(--text); background: var(--bg-light); transition: background-color 0.3s ease, color 0.3s ease; }
+    h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--text); line-height: 1.3; }
+    h1 { font-size: 2.9rem; font-weight: 700; }
+    h2 { font-size: 2rem; font-weight: 600; }
+    h3 { font-size: 1.35rem; font-weight: 600; }
+    p { color: var(--muted); }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+    /* Layout */
+    .app { display: flex; min-height: 100vh; }
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+      background: var(--sidebar-bg); color: white; padding: 1.75rem 1.25rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+      z-index: 100; overflow-y: auto; transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .main { margin-left: var(--sidebar-w); width: calc(100% - var(--sidebar-w)); min-height: 100vh; }
+    .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 4.5rem 0; }
+    /* Sidebar */
+    .brand { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
+    .brand-icon {
+      width: 40px; height: 40px; border-radius: 10px; background: var(--accent);
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: white; flex-shrink: 0;
+    }
+    .brand h2 { font-size: 1.05rem; color: white; margin: 0; }
+    .brand span { font-size: 0.72rem; color: lightsteelblue; display: block; }
+    .nav-list { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+    .nav-link {
+      display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 0.9rem;
+      border-radius: 10px; color: lightsteelblue; font-weight: 600; font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover, .nav-link.active { background: var(--primary); color: white; transform: translateX(3px); }
+    .nav-link.active { background: var(--accent); color: white; }
+    .nav-link i { width: 18px; text-align: center; }
+    .sidebar-note {
+      background: rgba(70, 130, 180, 0.3); border-radius: 10px; padding: 0.85rem;
+      font-size: 0.8rem; border: 1px solid var(--border); color: #e2e8f0; margin-top: 1rem;
+    }
+    .sidebar-note strong { color: var(--accent); display: block; margin-bottom: 0.3rem; }
+
+    /* Dark Mode Toggle Switch Button in Sidebar & Mobile Bar */
+    .theme-toggle-btn {
+      display: flex; align-items: center; justify-content: space-between; width: 100%;
+      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white; padding: 0.6rem 0.85rem; border-radius: 10px; font-size: 0.85rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: var(--font-body);
+      margin-top: 0.75rem;
+    }
+    .theme-toggle-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    .theme-toggle-btn i { font-size: 1rem; }
+
+    /* Mobile bar */
+    .mobile-bar {
+      display: none; position: fixed; top: 0; left: 0; right: 0; height: 60px;
+      background: var(--sidebar-bg); color: white; padding: 0 1.25rem;
+      align-items: center; justify-content: space-between; z-index: 99;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    .mobile-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .theme-toggle-icon-btn {
+      background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25);
+      color: white; width: 34px; height: 34px; border-radius: 8px; display: flex;
+      align-items: center; justify-content: center; font-size: 0.95rem; cursor: pointer;
+    }
+    .burger-btn, .close-sidebar { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+    .close-sidebar { display: none; position: absolute; top: 1.25rem; right: 1.25rem; }
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 95; }
+    .overlay.active { display: block; }
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.8rem 1.6rem; border-radius: var(--radius-btn); font-weight: 700;
+      cursor: pointer; transition: all 0.25s ease; border: 2px solid transparent; font-size: 0.95rem; font-family: var(--font-body);
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--primary); border-color: var(--primary); }
+    .btn-outline:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+    /* Cards */
+    .card {
+      background: var(--bg-white); border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow); border: 1px solid var(--border);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+    .header-center { text-align: center; max-width: 640px; margin: 0 auto 2.5rem auto; }
+    .badge {
+      display: inline-block; background: var(--secondary); color: var(--primary);
+      padding: 0.3rem 0.85rem; border-radius: 99px; font-size: 0.78rem; font-weight: 700;
+      text-transform: uppercase; margin-bottom: 0.65rem; letter-spacing: 0.5px;
+      border: 1px solid var(--border);
+    }
+    /* ---- HERO ---- */
+    .hero { background: var(--hero-bg); padding: 4.5rem 0 3.5rem; transition: background 0.3s ease; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; }
+    .hero-text h1 { margin-bottom: 1rem; }
+    .hero-text h1 span { color: var(--primary); }
+    .hero-text > p { font-size: 1.05rem; margin-bottom: 1.75rem; line-height: 1.75; }
+    .btn-row { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .feelings-strip { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+    .feeling-pill {
+      background: var(--bg-white); border: 1.5px solid var(--border); color: var(--primary);
+      padding: 0.3rem 0.8rem; border-radius: 99px; font-size: 0.8rem; font-weight: 700;
+    }
+    .feeling-pill i { color: var(--success); margin-right: 0.3rem; }
+    .hero-trust { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .trust-tag { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .trust-tag i { color: var(--primary); }
+    .hero-media { background: var(--bg-white); padding: 0.4rem; border-radius: 20px; box-shadow: var(--card-shadow); border: 1px solid var(--border); }
+    .hero-media img { border-radius: 16px; width: 100%; height: 360px; object-fit: cover; }
+    .hero-quote-box {
+      margin-top: 0.65rem; padding: 0.75rem 1rem; background: var(--secondary);
+      border-radius: 10px; font-size: 0.82rem; color: var(--muted); border-left: 3px solid var(--accent);
+    }
+    /* ---- ABOUT / COUNSELLORS ---- */
+    .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.25rem; }
+    .stat-box {
+      background: var(--bg-white); padding: 1rem; border-radius: var(--radius-btn); text-align: center;
+      border: 1px solid var(--border); box-shadow: var(--card-shadow);
+    }
+    .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--primary); font-family: var(--font-heading); }
+    .stat-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .counsellor-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; align-items: stretch; }
+    .c-compact-card {
+      background: var(--bg-white); border-radius: var(--radius-card); border: 1.5px solid var(--border);
+      box-shadow: var(--card-shadow); padding: 1.75rem 1.25rem 1.4rem;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      transition: transform 0.3s ease, border-color 0.3s ease; position: relative;
+    }
+    .c-compact-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .c-compact-card.selected-counsellor { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 163, 209, 0.4), var(--card-shadow); }
+    .c-selected-tag {
+      display: none; position: absolute; top: 10px; right: 10px;
+      background: var(--primary); color: white; font-size: 0.7rem; font-weight: 700;
+      padding: 0.2rem 0.6rem; border-radius: 99px; align-items: center; gap: 0.3rem;
+    }
+    .c-compact-card.selected-counsellor .c-selected-tag { display: inline-flex; }
+    .c-avatar-wrap { position: relative; width: 100px; height: 100px; margin: 0 auto 1.1rem; }
+    .c-avatar-img {
+      width: 100px; height: 100px; border-radius: 50%; object-fit: cover; object-position: center 20%;
+      border: 4px solid var(--secondary); box-shadow: 0 6px 18px var(--card-shadow);
+      transition: transform 0.3s ease, border-color 0.3s ease; background: var(--secondary);
+    }
+    .c-compact-card:hover .c-avatar-img,
+    .c-compact-card.selected-counsellor .c-avatar-img { transform: scale(1.05); border-color: var(--accent); }
+    .c-online-dot {
+      position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px;
+      background: var(--success); border-radius: 50%; border: 2px solid var(--bg-white);
+    }
+    .c-name { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+    .c-qual-pill {
+      display: inline-block; font-size: 0.72rem; font-weight: 700; color: var(--primary);
+      background: var(--secondary); padding: 0.2rem 0.7rem; border-radius: 99px; margin-bottom: 1rem;
+      border: 1px solid var(--border);
+    }
+    .c-about-box {
+      background: var(--chip-bg); border-radius: 10px; padding: 0.9rem 1rem;
+      text-align: left; margin-bottom: 1rem; border: 1px solid var(--border); flex: 1; width: 100%; min-height: 120px;
+    }
+    .c-about-title { font-size: 0.75rem; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+    .c-about-title i { color: var(--accent); }
+    .c-about-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.55; margin: 0; }
+    .c-tags-row { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin-bottom: 1rem; width: 100%; }
+    .c-tag { font-size: 0.7rem; font-weight: 600; background: var(--bg-white); color: var(--text); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 6px; }
+    .c-select-btn {
+      width: 100%; font-size: 0.85rem; font-weight: 700; color: var(--primary); background: var(--secondary);
+      border: 1.5px solid transparent; padding: 0.6rem 1rem; border-radius: 10px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      cursor: pointer; margin-top: auto; transition: all 0.2s ease; font-family: var(--font-body);
+    }
+    .c-select-btn:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+    .c-compact-card.selected-counsellor .c-select-btn { background: var(--primary); color: white; }
+    .safe-banner {
+      background: var(--secondary); border-radius: var(--radius-card); padding: 1.4rem 1.75rem;
+      border: 1px solid var(--border); display: flex; align-items: center;
+      justify-content: space-between; gap: 1.25rem; flex-wrap: wrap;
+    }
+    .safe-banner-left { display: flex; align-items: center; gap: 1rem; }
+    .safe-icon { width: 46px; height: 46px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+    .safe-banner-left h4 { font-size: 1rem; color: var(--text); margin-bottom: 0.2rem; }
+    .safe-banner-left p { font-size: 0.85rem; color: var(--muted); max-width: 540px; margin: 0; }
+    /* ---- SERVICES ---- */
+    .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .service-card { padding: 1.75rem; display: flex; flex-direction: column; }
+    .s-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; margin-bottom: 1.1rem; }
+    .s-icon.academic { background: var(--secondary); color: var(--primary); }
+    .s-icon.career { background: var(--danger-bg); color: var(--accent); }
+    .s-icon.mental { background: var(--success-bg); color: var(--success); }
+    .s-icon.peer { background: rgba(147, 51, 234, 0.15); color: var(--purple); }
+    .service-card h3 { margin-bottom: 0.5rem; }
+    .service-card > p { font-size: 0.92rem; margin-bottom: 1rem; flex: 1; }
+    .s-points { list-style: none; font-size: 0.83rem; color: var(--text); display: flex; flex-direction: column; gap: 0.4rem; }
+    .s-points li i { color: var(--primary); margin-right: 0.4rem; }
+    /* ---- BOOKING ---- */
+    .book-split { display: grid; grid-template-columns: 1fr 1.15fr; gap: 2.25rem; align-items: start; }
+    .book-left { background: var(--bg-white); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border); }
+    .book-left img { width: 100%; height: 240px; object-fit: cover; }
+    .book-info { padding: 1.5rem; }
+    .book-info h3 { margin-bottom: 0.5rem; color: var(--primary); }
+    .book-info > p { font-size: 0.88rem; margin-bottom: 1rem; }
+    .perks { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.85rem; }
+    .perks li { display: flex; align-items: center; gap: 0.6rem; color: var(--text); }
+    .perks li i { color: var(--success); }
+    .form-card { padding: 2rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { display: block; font-size: 0.83rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text); }
+    .input-field {
+      width: 100%; padding: 0.7rem 0.95rem; border: 1.5px solid var(--border);
+      border-radius: var(--radius-btn); font-family: var(--font-body); font-size: 0.92rem;
+      outline: none; transition: all 0.2s ease; background: var(--input-bg); color: var(--text);
+    }
+    .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 163, 209, 0.35); }
+    .input-field.error { border-color: var(--danger); box-shadow: 0 0 0 3px var(--danger-bg); }
+    .err-text { color: var(--danger); font-size: 0.74rem; font-weight: 600; margin-top: 0.25rem; display: none; }
+    textarea.input-field { min-height: 80px; resize: vertical; }
+    .counsellor-picker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.45rem; margin-bottom: 0.65rem; }
+    .counsellor-chip {
+      background: var(--chip-bg); border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 0.5rem 0.4rem; display: flex; flex-direction: column; align-items: center;
+      gap: 0.3rem; cursor: pointer; text-align: center; transition: all 0.2s ease;
+    }
+    .counsellor-chip:hover { border-color: var(--primary); background: var(--bg-white); }
+    .counsellor-chip.active { border-color: var(--primary); background: var(--secondary); box-shadow: 0 2px 8px rgba(79, 163, 209, 0.35); }
+    .chip-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+    .chip-avatar-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--secondary); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+    .chip-name { font-size: 0.72rem; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .counsellor-banner { display: flex; align-items: center; justify-content: space-between; background: var(--secondary); border: 1px solid var(--border); padding: 0.55rem 0.8rem; border-radius: 8px; margin-top: 0.4rem; font-size: 0.78rem; color: var(--text); }
+    .counsellor-banner strong { color: var(--primary); }
+    .success-panel { display: none; text-align: center; padding: 1.75rem 1rem; animation: pop 0.3s ease; }
+    .success-panel.active { display: block; }
+    .success-icon { width: 60px; height: 60px; border-radius: 50%; background: var(--success-bg); color: var(--success); font-size: 1.9rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.1rem; }
+    .summary-card { background: var(--secondary); padding: 1.1rem; border-radius: 10px; margin: 1.25rem 0; text-align: left; font-size: 0.83rem; border: 1px dashed var(--primary); }
+    .summary-card div { display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid var(--border); }
+    .summary-card div:last-child { border-bottom: none; }
+    .summary-card strong { color: var(--text); }
+    /* ---- FAQS ---- */
+    .faq-wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+    .faq-item { border: 1.5px solid var(--border); border-radius: 12px; background: var(--bg-white); overflow: hidden; transition: border-color 0.2s, background 0.3s; }
+    .faq-item.active { border-color: var(--primary); }
+    .faq-q { width: 100%; padding: 1.1rem 1.4rem; background: none; border: none; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-heading); font-size: 0.95rem; font-weight: 600; color: var(--text); cursor: pointer; text-align: left; }
+    .faq-q i { color: var(--primary); transition: transform 0.3s ease; }
+    .faq-item.active .faq-q i { transform: rotate(180deg); color: var(--accent); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-a p { padding: 0 1.4rem 1.1rem; font-size: 0.92rem; color: var(--muted); }
+    /* ---- FOOTER ---- */
+    .footer { background: var(--sidebar-bg); color: #cbd5e1; padding: 3.5rem 0 1.75rem; border-top: 4px solid var(--primary); transition: background 0.3s ease; }
+    .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 2.25rem; margin-bottom: 2.25rem; }
+    .footer h3 { color: white; font-size: 1.1rem; margin-bottom: 0.65rem; }
+    .footer p { color: #94a3b8; font-size: 0.88rem; }
+    .footer-note { background: rgba(70, 130, 180, 0.3); border-left: 3px solid var(--accent); padding: 0.65rem; border-radius: 4px; margin-top: 0.9rem; font-size: 0.78rem; color: #f1f5f9; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.88rem; color: #cbd5e1; }
+    .footer-links i { color: var(--accent); width: 16px; margin-right: 0.4rem; }
+    .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.9rem; font-size: 0.82rem; color: #94a3b8; }
+    .socials { display: flex; gap: 0.65rem; }
+    .socials a { width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.12); display: flex; align-items: center; justify-content: center; color: white; transition: all 0.2s; }
+    .socials a:hover { background: var(--accent); transform: translateY(-2px); }
+    /* Scroll fade */
+    .fade { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .fade.visible { opacity: 1; transform: translateY(0); }
+    /* Responsive */
+    @media (max-width: 992px) {
+      .hero-grid, .book-split { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .about-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 860px) {
+      .mobile-bar { display: flex; }
+      .close-sidebar { display: block; }
+      .sidebar { transform: translateX(-100%); width: 260px; }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; width: 100%; padding-top: 60px; }
+      .services-grid, .form-row { grid-template-columns: 1fr; }
+      .counsellor-row { grid-template-columns: 1fr; }
+      .safe-banner { flex-direction: column; text-align: center; }
+      .safe-banner-left { flex-direction: column; text-align: center; }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.6rem; }
+      section { padding: 3rem 0; }
+    }
+    @media (max-width: 580px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .form-card { padding: 1.4rem; }
+      .hero-media img { height: 240px; }
+      .counsellor-picker-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  </style>
+</head>
+<body>
+<!-- Mobile Top Bar -->
+<header class="mobile-bar">
+  <div class="brand" style="margin:0;">
+    <div class="brand-icon" style="width:32px;height:32px;font-size:1rem;"><i class="fa-solid fa-seedling"></i></div>
+    <h2 style="font-size:1rem;">MindCare</h2>
+  </div>
+  <div class="mobile-actions">
+    <button class="theme-toggle-icon-btn" id="mobileThemeToggle" aria-label="Toggle Dark Mode" title="Toggle Theme">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+    <button class="burger-btn" id="burgerBtn" aria-label="Open Navigation"><i class="fa-solid fa-bars"></i></button>
+  </div>
+</header>
+<div class="overlay" id="overlay"></div>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-sidebar" id="closeSidebar"><i class="fa-solid fa-xmark"></i></button>
+    <div>
+      <div class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-seedling"></i></div>
+        <div>
+          <h2>MindCare</h2>
+          <span>Student Wellbeing</span>
+        </div>
+      </div>
+      <nav>
+        <ul class="nav-list">
+          <li><a class="nav-link active" href="#hero"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a class="nav-link" href="#about"><i class="fa-solid fa-user-doctor"></i> Meet the Team</a></li>
+          <li><a class="nav-link" href="#services"><i class="fa-solid fa-hand-holding-heart"></i> Services</a></li>
+          <li><a class="nav-link" href="#booking"><i class="fa-solid fa-calendar-check"></i> Book a Session</a></li>
+          <li><a class="nav-link" href="#faqs"><i class="fa-solid fa-circle-question"></i> FAQs</a></li>
+          <li><a class="nav-link" href="#contact"><i class="fa-solid fa-phone"></i> Crisis &amp; Contact</a></li>
+        </ul>
+      </nav>
+      <!-- Dark Mode Toggle Button in Sidebar -->
+      <button class="theme-toggle-btn" id="sidebarThemeToggle" aria-label="Toggle Dark Mode">
+        <span id="themeToggleText"><i class="fa-solid fa-moon" style="margin-right:0.5rem;"></i> Dark Mode</span>
+        <i class="fa-solid fa-toggle-off" id="themeToggleIcon" style="font-size:1.2rem;"></i>
+      </button>
+    </div>
+    <div class="sidebar-note">
+      <strong><i class="fa-solid fa-shield-halved"></i> 100% Confidential</strong>
+      Nothing shared here ever appears on your academic record. You have our word.
+      <div style="margin-top:0.5rem;font-weight:700;color:white;">
+        Crisis Line: <span style="color:coral;">988</span> (24/7)
+      </div>
+    </div>
+  </aside>
+  <!-- Main Content -->
+  <main class="main">
+    <!-- ===== SECTION 1: HERO ===== -->
+    <section class="hero" id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-text fade visible">
+            <span class="badge"><i class="fa-solid fa-couch"></i> Your Campus Safe Haven</span>
+            <h1>College is intense. You don't have to carry it all <span>alone</span>.</h1>
+            <p>Got 3 a.m. overthinking spirals, exam dread, or just feel completely off? Get free, 100% confidential support from warm campus counsellors who truly understand student life.</p>
+            <div class="feelings-strip">
+              <span class="feeling-pill"><i class="fa-solid fa-check"></i> Exam Dread</span>
+              <span class="feeling-pill"><i class="fa-solid fa-check"></i> Imposter Syndrome</span>
+              <span class="feeling-pill"><i class="fa-solid fa-check"></i> Homesickness</span>
+              <span class="feeling-pill"><i class="fa-solid fa-check"></i> Sleep &amp; Burnout</span>
+            </div>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="#booking"><i class="fa-solid fa-calendar-plus"></i> Grab a Free Session</a>
+              <a class="btn btn-outline" href="#about">Meet Our Team <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="hero-trust">
+              <div class="trust-tag"><i class="fa-solid fa-lock"></i> 100% Confidential</div>
+              <div class="trust-tag"><i class="fa-solid fa-mug-hot"></i> Free Tea &amp; Cozy Space</div>
+              <div class="trust-tag"><i class="fa-solid fa-certificate"></i> Off Your Transcripts</div>
+            </div>
+          </div>
+          <div class="hero-media fade visible">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBblcZmAOJaA0XKfSWtcSe6ltfiDgjw7y9KnBl0u26n42KAaw-j5UqCu9jb36QvtcNMQ0FxPt-eWqsyG4VlmmCG65TVG1Yv-LNorkfYZJZAEGoclDH9FPdIUq8Vt0x_0iXTfNhKR8AuDj3twNlFATuJAbmZp46Ov0-_K72XgYRUcodnS0Ybo-Sh-Hlnr1RUQIxhJLlQQh_TPjzuIYdejY8tRk0yXkYPGMcOvEMUsRxp" alt="Warm counselling session">
+            <div class="hero-quote-box">
+              <i class="fa-solid fa-quote-left" style="color:var(--accent);margin-right:0.3rem;"></i>
+              "Taking 45 minutes to talk genuinely saved my semester. No judgment, just warmth." — Maya, 2nd Year Psychology
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== SECTION 2: COUNSELLORS ===== -->
+    <section id="about">
+      <div class="container">
+        <div class="header-center fade visible">
+          <span class="badge">Friendly people, zero judgment</span>
+          <h2>Meet the Humans Behind Your Support</h2>
+          <p>No intimidating clipboards or clinical coldness — just warm, licensed professionals ready to listen to whatever you're carrying right now.</p>
+        </div>
+        <!-- Stats strip -->
+        <div class="about-stats fade visible">
+          <div class="stat-box"><div class="stat-num">100%</div><div class="stat-label">Free &amp; Private</div></div>
+          <div class="stat-box"><div class="stat-num">1,800+</div><div class="stat-label">Students Supported</div></div>
+          <div class="stat-box"><div class="stat-num">15+ Yrs</div><div class="stat-label">Combined Wisdom</div></div>
+          <div class="stat-box"><div class="stat-num">4.9★</div><div class="stat-label">Student Rating</div></div>
+        </div>
+        <!-- Counsellor cards -->
+        <div class="counsellor-row">
+          <!-- Dr. Sarah -->
+          <div class="card c-compact-card fade visible" id="counsellor-card-sarah">
+            <span class="c-selected-tag"><i class="fa-solid fa-check"></i> Selected</span>
+            <div class="c-avatar-wrap">
+              <img class="c-avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8vYsgkQrNTlKOW_wntyQjREhljL_uPBvevtIh1XG9oVd0-4liQ5Zt_hAR_K8MI2Sdtl2tfuSDFODeWopQCZN9ussfFnt1eigQbQrg0DIUu8UdP8zPGBDJzcwZBbgbdtiY1tykBup7Bj5sikhFgW2eGDpTPAnnsH4x_KmuMxSF0n3bTVju2lN4bBf2Czh9r8-0x5S_bJTuZRmEgOIRO0XDAmdcHa3dhPTwfPPCvuib" alt="Dr. Sarah Jenkins">
+              <span class="c-online-dot" title="Available"></span>
+            </div>
+            <h3 class="c-name">Dr. Sarah Jenkins</h3>
+            <span class="c-qual-pill">Clinical Psychologist, Ph.D.</span>
+            <div class="c-about-box">
+              <div class="c-about-title"><i class="fa-solid fa-user-check"></i> About Dr. Sarah</div>
+              <p class="c-about-desc">Expert at shutting down exam panic, untangling imposter syndrome, and giving your overworked brain permission to breathe. Loves hiking and cozy mystery novels.</p>
+            </div>
+            <div class="c-tags-row">
+              <span class="c-tag">Exam Panic</span>
+              <span class="c-tag">Burnout</span>
+              <span class="c-tag">Mindfulness</span>
+            </div>
+            <button class="c-select-btn" data-counsellor="sarah" type="button">
+              <i class="fa-solid fa-calendar-check"></i> Book with Dr. Sarah
+            </button>
+          </div>
+          <!-- Marcus -->
+          <div class="card c-compact-card fade visible" id="counsellor-card-marcus">
+            <span class="c-selected-tag"><i class="fa-solid fa-check"></i> Selected</span>
+            <div class="c-avatar-wrap">
+              <img class="c-avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJqdZoExwtP8ylgEunOD-Y7igR1PmzXNRPcfQzzEMuQrtpM9O31tdkcCHdDU_35wfNDGSwUVgeC5rR8u1sNdiQCKwxKW47CrHnocxSyfZ2RJnLfPrb5wJQCdsOxyfqqRXITJqVuJFTpV9-czXGb__xhiqiy-5954CMrAi6WM3vkcmVVClpWPFrGGx0r7m3ozmuq_8eaHC9gV6gi4UjFH7Ih6J7g5NYU5WbLx8tYOLG" alt="Marcus Vance">
+              <span class="c-online-dot" title="Available"></span>
+            </div>
+            <h3 class="c-name">Marcus Vance</h3>
+            <span class="c-qual-pill">Licensed MFT, Career Specialist</span>
+            <div class="c-about-box">
+              <div class="c-about-title"><i class="fa-solid fa-compass"></i> About Marcus</div>
+              <p class="c-about-desc">Here to unpack post-grad freak-outs, roommate friction, career crossroads, and family pressure. Big coffee drinker, basketball fan, and fantastic listener.</p>
+            </div>
+            <div class="c-tags-row">
+              <span class="c-tag">Career Goals</span>
+              <span class="c-tag">Peer Dynamics</span>
+              <span class="c-tag">Transitions</span>
+            </div>
+            <button class="c-select-btn" data-counsellor="marcus" type="button">
+              <i class="fa-solid fa-calendar-check"></i> Book with Marcus
+            </button>
+          </div>
+          <!-- Elena -->
+          <div class="card c-compact-card fade visible" id="counsellor-card-elena">
+            <span class="c-selected-tag"><i class="fa-solid fa-check"></i> Selected</span>
+            <div class="c-avatar-wrap">
+              <img class="c-avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLlHSbMqiQ7IBOubfgFqy9gXk2zup6N32ZFmdJV9hfAffkZIzo20K6OujADovwFUiEuwNhOmWN8ToO5Xu0Afc5e3Ni-w1O8XqKRwewZJw-Fy5ouEIrMZFv7JFxDDkmcG0rkl6v-iFMqnDIiK-m_hYjYcuZmoMj2s1d3ZzOWNFdsN6WIGX8i-f1nK2WEtorr9d005ZvIcLypiX19u0zXpSMoDiF-A-ewBC2KgUq4aw3" alt="Elena Rodriguez">
+              <span class="c-online-dot" title="Available"></span>
+            </div>
+            <h3 class="c-name">Elena Rodriguez</h3>
+            <span class="c-qual-pill">LCSW, Mental Health Specialist</span>
+            <div class="c-about-box">
+              <div class="c-about-title"><i class="fa-solid fa-heart-pulse"></i> About Elena</div>
+              <p class="c-about-desc">Your go-to for calming racing thoughts, somatic grounding exercises, and rebuilding healthy sleep habits. Amateur watercolour painter and champion napper.</p>
+            </div>
+            <div class="c-tags-row">
+              <span class="c-tag">Anxiety</span>
+              <span class="c-tag">Sleep Wellness</span>
+              <span class="c-tag">Self-Care</span>
+            </div>
+            <button class="c-select-btn" data-counsellor="elena" type="button">
+              <i class="fa-solid fa-calendar-check"></i> Book with Elena
+            </button>
+          </div>
+        </div>
+        <!-- Safe space banner -->
+        <div class="safe-banner fade visible">
+          <div class="safe-banner-left">
+            <div class="safe-icon"><i class="fa-solid fa-shield-heart"></i></div>
+            <div>
+              <h4>No problem is "too dumb" or "too small" to bring here.</h4>
+              <p>Rough Tuesday, mid-semester wall, heartbreak, or just a weird feeling you can't name — we're here with zero judgment and a warm cup of tea waiting.</p>
+            </div>
+          </div>
+          <a class="btn btn-primary" href="#booking"><i class="fa-solid fa-calendar-plus"></i> Let's Talk</a>
+        </div>
+      </div>
+    </section>
+    <!-- ===== SECTION 3: SERVICES ===== -->
+    <section id="services">
+      <div class="container">
+        <div class="header-center fade visible">
+          <span class="badge">What's on Your Mind?</span>
+          <h2>Real Support for Real College Life</h2>
+          <p>Whatever's weighing on you right now — big, small, or somewhere in between — we have a space for it.</p>
+        </div>
+        <div class="services-grid">
+          <div class="card service-card fade visible">
+            <div class="s-icon academic"><i class="fa-solid fa-graduation-cap"></i></div>
+            <h3>Academic Stress</h3>
+            <p>Exam dread, brutal deadlines, thesis paralysis, or dangerous levels of procrastination eating your sleep.</p>
+            <ul class="s-points">
+              <li><i class="fa-solid fa-check"></i> Realistic, sustainable study rhythms</li>
+              <li><i class="fa-solid fa-check"></i> Calming test-day anxiety before it spirals</li>
+              <li><i class="fa-solid fa-check"></i> Breaking through that intimidating blank page</li>
+            </ul>
+          </div>
+          <div class="card service-card fade visible">
+            <div class="s-icon career"><i class="fa-solid fa-compass"></i></div>
+            <h3>Career Guidance</h3>
+            <p>Major regrets, interview nerves, post-grad panic, or just figuring out what you actually want from life.</p>
+            <ul class="s-points">
+              <li><i class="fa-solid fa-check"></i> Strengths mapping &amp; direction clarity</li>
+              <li><i class="fa-solid fa-check"></i> Post-grad survival tactics &amp; next steps</li>
+              <li><i class="fa-solid fa-check"></i> Building confidence before big interviews</li>
+            </ul>
+          </div>
+          <div class="card service-card fade visible">
+            <div class="s-icon mental"><i class="fa-solid fa-brain"></i></div>
+            <h3>Anxiety &amp; Mental Wellbeing</h3>
+            <p>Grounding tools, emotional resets, and relief from the relentless background hum of anxiety.</p>
+            <ul class="s-points">
+              <li><i class="fa-solid fa-check"></i> Mindfulness techniques you will actually use</li>
+              <li><i class="fa-solid fa-check"></i> Sleep reset &amp; healthy rest habits</li>
+              <li><i class="fa-solid fa-check"></i> Breathing &amp; body-based calming practices</li>
+            </ul>
+          </div>
+          <div class="card service-card fade visible">
+            <div class="s-icon peer"><i class="fa-solid fa-users"></i></div>
+            <h3>Peer &amp; Family Issues</h3>
+            <p>Tricky roommate dynamics, homesickness, relationship tension, or family expectations weighing on you.</p>
+            <ul class="s-points">
+              <li><i class="fa-solid fa-check"></i> Learning to speak up with warmth &amp; confidence</li>
+              <li><i class="fa-solid fa-check"></i> Setting healthy boundaries without guilt</li>
+              <li><i class="fa-solid fa-check"></i> Adjusting to campus life away from home</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== SECTION 4: BOOKING ===== -->
+    <section id="booking">
+      <div class="container">
+        <div class="header-center fade visible">
+          <span class="badge">Quick &amp; Easy</span>
+          <h2>Take a Moment for Yourself — Book a Session</h2>
+          <p>Choose who you'd like to speak with, pick a time that suits you, and you're all set. In-person or online — it's completely your call.</p>
+        </div>
+        <div class="book-split">
+          <!-- Left info panel -->
+          <div class="book-left fade visible">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXVP4a6VXj7xBchEqr7DicOctc0q52Jof5VxrkhTy-UEkRiDQ771bvPNFtjYL9uhlbjVg4XeZi_1chHOePh8m5zF1RP2PMW_KAL_y2NXcD_n2a8nMGLLGekdaLtijZdqcBtVtabkrpI9UisjKJFHXLYFNw8TcQyecpiY3WeVKLrMbqnOCsgyiHrT0GjjS8DY9Gy1btB0ld-O2x_QuVOlQaGxnCX9t5LUkybnEn7Zo2" alt="Counsellor talking with student" style="border-radius:0;">
+            <div class="book-info">
+              <h3>What It's Actually Like</h3>
+              <p>Zero awkward silences, no interrogation, no judgment. Just 45 relaxed minutes centered entirely around you at your own pace.</p>
+              <ul class="perks">
+                <li><i class="fa-solid fa-circle-check"></i> 100% free for all registered students</li>
+                <li><i class="fa-solid fa-circle-check"></i> In-person (Health Center) or secure video call</li>
+                <li><i class="fa-solid fa-circle-check"></i> Never appears on your academic record</li>
+                <li><i class="fa-solid fa-clock"></i> Monday to Friday — weekends are yours to rest</li>
+              </ul>
+            </div>
+          </div>
+          <!-- Booking form -->
+          <div class="card form-card fade visible">
+            <div id="formBox">
+              <form id="bookForm" novalidate>
+                <!-- Counsellor picker -->
+                <div class="form-group" style="margin-bottom:1.25rem;">
+                  <label style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>Choose Your Counsellor *</span>
+                    <span id="counsellorBadgeNote" style="font-size:0.72rem;color:var(--primary);font-weight:600;">Personalized match</span>
+                  </label>
+                  <div class="counsellor-picker-grid">
+                    <div class="counsellor-chip active" data-val="auto">
+                      <div class="chip-avatar-icon"><i class="fa-solid fa-bolt"></i></div>
+                      <div class="chip-name">First Available</div>
+                    </div>
+                    <div class="counsellor-chip" data-val="sarah">
+                      <img class="chip-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8vYsgkQrNTlKOW_wntyQjREhljL_uPBvevtIh1XG9oVd0-4liQ5Zt_hAR_K8MI2Sdtl2tfuSDFODeWopQCZN9ussfFnt1eigQbQrg0DIUu8UdP8zPGBDJzcwZBbgbdtiY1tykBup7Bj5sikhFgW2eGDpTPAnnsH4x_KmuMxSF0n3bTVju2lN4bBf2Czh9r8-0x5S_bJTuZRmEgOIRO0XDAmdcHa3dhPTwfPPCvuib" alt="Dr. Sarah">
+                      <div class="chip-name">Dr. Sarah</div>
+                    </div>
+                    <div class="counsellor-chip" data-val="marcus">
+                      <img class="chip-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJqdZoExwtP8ylgEunOD-Y7igR1PmzXNRPcfQzzEMuQrtpM9O31tdkcCHdDU_35wfNDGSwUVgeC5rR8u1sNdiQCKwxKW47CrHnocxSyfZ2RJnLfPrb5wJQCdsOxyfqqRXITJqVuJFTpV9-czXGb__xhiqiy-5954CMrAi6WM3vkcmVVClpWPFrGGx0r7m3ozmuq_8eaHC9gV6gi4UjFH7Ih6J7g5NYU5WbLx8tYOLG" alt="Marcus">
+                      <div class="chip-name">Marcus</div>
+                    </div>
+                    <div class="counsellor-chip" data-val="elena">
+                      <img class="chip-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLlHSbMqiQ7IBOubfgFqy9gXk2zup6N32ZFmdJV9hfAffkZIzo20K6OujADovwFUiEuwNhOmWN8ToO5Xu0Afc5e3Ni-w1O8XqKRwewZJw-Fy5ouEIrMZFv7JFxDDkmcG0rkl6v-iFMqnDIiK-m_hYjYcuZmoMj2s1d3ZzOWNFdsN6WIGX8i-f1nK2WEtorr9d005ZvIcLypiX19u0zXpSMoDiF-A-ewBC2KgUq4aw3" alt="Elena">
+                      <div class="chip-name">Elena</div>
+                    </div>
+                  </div>
+                  <select class="input-field" id="counsellorSelect" required>
+                    <option value="First Available / Match Me Automatically" selected>First Available / Match Me Automatically (Fastest)</option>
+                    <option value="Dr. Sarah Jenkins (Clinical Psychologist, Ph.D. — Exam Panic, Burnout)">Dr. Sarah Jenkins — Exam Panic &amp; Burnout</option>
+                    <option value="Marcus Vance (Licensed MFT — Career Crossroads, Life Transitions)">Marcus Vance — Career &amp; Life Transitions</option>
+                    <option value="Elena Rodriguez (LCSW — Anxiety, Somatic Grounding, Sleep Wellness)">Elena Rodriguez — Anxiety &amp; Sleep Wellness</option>
+                  </select>
+                  <div class="counsellor-banner" id="counsellorNotice">
+                    <span><i class="fa-solid fa-sparkles" style="color:var(--accent);margin-right:0.3rem;"></i> Booking with: <strong id="selectedCounsellorText">First Available</strong></span>
+                    <span style="font-size:0.72rem;color:var(--success);font-weight:700;"><i class="fa-solid fa-circle-check"></i> Confirmed</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="name">Full Name *</label>
+                  <input class="input-field" id="name" type="text" placeholder="e.g. Alex Morgan" required>
+                  <div class="err-text" id="nameErr">Please enter your name (at least 2 characters).</div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="email">Student Email *</label>
+                    <input class="input-field" id="email" type="email" placeholder="alex@campus.edu" required>
+                    <div class="err-text" id="emailErr">Please enter a valid email address.</div>
+                  </div>
+                  <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input class="input-field" id="phone" type="tel" placeholder="(555) 012-3456" required>
+                    <div class="err-text" id="phoneErr">Please enter a valid phone number.</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="type">Counselling Track *</label>
+                  <select class="input-field" id="type" required>
+                    <option value="" disabled selected>Select a counselling track...</option>
+                    <option value="Academic Stress">Academic Stress</option>
+                    <option value="Career Guidance">Career Guidance</option>
+                    <option value="Anxiety &amp; Mental Wellbeing">Anxiety &amp; Mental Wellbeing</option>
+                    <option value="Peer &amp; Family Issues">Peer &amp; Family Issues</option>
+                    <option value="General Check-in">General Consultation / Not Sure</option>
+                  </select>
+                  <div class="err-text" id="typeErr">Please select a counselling track.</div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="date">Preferred Date * <span style="font-size:0.7rem;color:var(--primary);font-weight:600;">(Mon–Fri only)</span></label>
+                    <input class="input-field" id="date" type="date" required>
+                    <div class="err-text" id="dateErr">Please pick a weekday (Mon–Fri). We're closed on weekends.</div>
+                  </div>
+                  <div class="form-group">
+                    <label for="time">Preferred Time *</label>
+                    <select class="input-field" id="time" required>
+                      <option value="" disabled selected>Select time slot...</option>
+                      <option value="09:00 AM">09:00 AM – 09:45 AM</option>
+                      <option value="11:00 AM">11:00 AM – 11:45 AM</option>
+                      <option value="02:00 PM">02:00 PM – 02:45 PM</option>
+                      <option value="04:00 PM">04:00 PM – 04:45 PM</option>
+                    </select>
+                    <div class="err-text" id="timeErr">Please select a time slot.</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="msg">Anything You'd Like Us to Know? (Optional)</label>
+                  <textarea class="input-field" id="msg" placeholder="Share as much or as little as you feel comfortable with — no pressure at all."></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit" style="width:100%;margin-top:0.25rem;">
+                  <i class="fa-solid fa-check"></i> Lock In My Appointment
+                </button>
+              </form>
+            </div>
+            <!-- Success state -->
+            <div class="success-panel" id="successBox">
+              <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+              <h3 style="color:var(--success);margin-bottom:0.4rem;">You're All Set! 🌱</h3>
+              <p>We've reserved your slot and sent confirmation to your email. You took a brave step — we're proud of you.</p>
+              <div class="summary-card">
+                <div><span>Reference:</span> <strong id="sumRef">MC-4921</strong></div>
+                <div><span>Student:</span> <strong id="sumName">Alex Morgan</strong></div>
+                <div><span>Counsellor:</span> <strong id="sumCounsellor">Dr. Sarah Jenkins</strong></div>
+                <div><span>Track:</span> <strong id="sumType">Academic Stress</strong></div>
+                <div><span>Scheduled:</span> <strong id="sumDate">Tomorrow at 11:00 AM</strong></div>
+              </div>
+              <button class="btn btn-outline" id="resetBtn" type="button">Book Another Session</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== SECTION 5: FAQs ===== -->
+    <section id="faqs">
+      <div class="container">
+        <div class="header-center fade visible">
+          <span class="badge">Got Questions?</span>
+          <h2>Everything You Might Be Wondering</h2>
+          <p>Real answers to things students ask us before plucking up the courage for their first visit.</p>
+        </div>
+        <div class="faq-wrap fade visible">
+          <div class="faq-item active">
+            <button class="faq-q"><span>1. Will my professors or parents ever find out?</span><i class="fa-solid fa-chevron-down"></i></button>
+            <div class="faq-a" style="max-height:80px;">
+              <p>Absolutely not. Everything is 100% confidential — nothing ever appears on your academic record, transcripts, or gets shared with family. What stays in that room, stays in that room, full stop.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q"><span>2. Is it really free — no hidden catch?</span><i class="fa-solid fa-chevron-down"></i></button>
+            <div class="faq-a">
+              <p>Completely free, no catch. It's already covered by your student fees. You will never receive a bill, invoice, or payment request of any kind. Promise.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q"><span>3. Can I meet online from my room?</span><i class="fa-solid fa-chevron-down"></i></button>
+            <div class="faq-a">
+              <p>Yes! Choose cosy in-person sessions at the Health Center (Block 34, Room 204) or secure, private video calls from wherever you're most comfortable — even your bed in pyjamas.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q"><span>4. What if I freeze up and don't know what to say?</span><i class="fa-solid fa-chevron-down"></i></button>
+            <div class="faq-a">
+              <p>Completely normal — most students feel that way before session one! You don't need a speech or agenda. Your counsellor will gently guide the conversation at whatever pace feels right for you.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q"><span>5. How many sessions can I have?</span><i class="fa-solid fa-chevron-down"></i></button>
+            <div class="faq-a">
+              <p>Registered students can access up to 8 sessions per academic year at zero cost. Additional sessions may be arranged based on availability and need — just ask your counsellor.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" id="contact">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <h3><i class="fa-solid fa-seedling" style="color:coral;margin-right:0.4rem;"></i> MindCare Counselling</h3>
+            <p>Safe, warm, and accessible mental health support for the entire university community — no matter where you are in your journey.</p>
+            <div class="footer-note">
+              <i class="fa-solid fa-shield-halved" style="color:coral;margin-right:0.3rem;"></i>
+              <strong>Privacy Guarantee:</strong> All sessions are strictly confidential and protected by student privacy policy.
+            </div>
+          </div>
+          <div>
+            <h3>Contact Us</h3>
+            <ul class="footer-links">
+              <li><i class="fa-solid fa-location-dot"></i> Student Health Center, Room 204</li>
+              <li><i class="fa-solid fa-phone"></i> (555) 019-2834</li>
+              <li><i class="fa-solid fa-envelope"></i> counselling@campus.edu</li>
+              <li><i class="fa-solid fa-clock"></i> Mon – Fri: 8:30 AM – 5:00 PM</li>
+              <li><i class="fa-solid fa-ban"></i> Closed Saturdays &amp; Sundays</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Immediate Support</h3>
+            <p style="margin-bottom:0.65rem;">Experiencing an emotional crisis or emergency? Please reach out right now:</p>
+            <p style="color:coral;font-weight:700;font-size:1.05rem;"><i class="fa-solid fa-phone-volume"></i> 988 Lifeline — Call or Text, 24/7</p>
+            <p style="margin-top:0.75rem;">You are never alone, even at 3 a.m. Help is always one call away.</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div>© 2026 MindCare Student Counselling. All rights reserved.</div>
+          <div class="socials">
+            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 0. Dark Mode Setup & Sync
+    const body = document.documentElement;
+    const sidebarToggle = document.getElementById('sidebarThemeToggle');
+    const mobileToggle  = document.getElementById('mobileThemeToggle');
+    const toggleIcon    = document.getElementById('themeToggleIcon');
+    const toggleText    = document.getElementById('themeToggleText');
+
+    const updateThemeUI = (isDark) => {
+      if (isDark) {
+        body.setAttribute('data-theme', 'dark');
+        if (toggleIcon) { toggleIcon.className = 'fa-solid fa-toggle-on'; toggleIcon.style.color = 'coral'; }
+        if (toggleText) { toggleText.innerHTML = '<i class="fa-solid fa-sun" style="margin-right:0.5rem;color:gold;"></i> Light Mode'; }
+        if (mobileToggle) { mobileToggle.innerHTML = '<i class="fa-solid fa-sun" style="color:gold;"></i>'; }
+      } else {
+        body.removeAttribute('data-theme');
+        if (toggleIcon) { toggleIcon.className = 'fa-solid fa-toggle-off'; toggleIcon.style.color = ''; }
+        if (toggleText) { toggleText.innerHTML = '<i class="fa-solid fa-moon" style="margin-right:0.5rem;"></i> Dark Mode'; }
+        if (mobileToggle) { mobileToggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; }
+      }
+    };
+
+    const savedTheme = localStorage.getItem('mindcare_theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let isDark = savedTheme ? (savedTheme === 'dark') : prefersDark;
+    updateThemeUI(isDark);
+
+    const toggleTheme = () => {
+      isDark = !isDark;
+      updateThemeUI(isDark);
+      localStorage.setItem('mindcare_theme', isDark ? 'dark' : 'light');
+    };
+
+    sidebarToggle?.addEventListener('click', toggleTheme);
+    mobileToggle?.addEventListener('click', toggleTheme);
+
+    // 1. Mobile sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const burger = document.getElementById('burgerBtn');
+    const closeBtn = document.getElementById('closeSidebar');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const toggle = (open) => {
+      sidebar.classList.toggle('open', open);
+      overlay.classList.toggle('active', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    burger?.addEventListener('click', () => toggle(true));
+    closeBtn?.addEventListener('click', () => toggle(false));
+    overlay?.addEventListener('click', () => toggle(false));
+    navLinks.forEach(l => l.addEventListener('click', () => toggle(false)));
+    // 2. Active nav on scroll
+    const sections = document.querySelectorAll('section[id], footer[id]');
+    window.addEventListener('scroll', () => {
+      const pos = window.scrollY + 200;
+      sections.forEach(sec => {
+        if (pos >= sec.offsetTop && pos < sec.offsetTop + sec.offsetHeight) {
+          navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + sec.id));
+        }
+      });
+    });
+    // 3. Set min date to today
+    const dateEl = document.getElementById('date');
+    if (dateEl) dateEl.min = new Date().toISOString().split('T')[0];
+    // 4. Counsellor selection map
+    const cMap = {
+      sarah:  { name: 'Dr. Sarah Jenkins',                    opt: 'Dr. Sarah Jenkins (Clinical Psychologist, Ph.D. — Exam Panic, Burnout)',  card: 'counsellor-card-sarah',  track: 'Academic Stress' },
+      marcus: { name: 'Marcus Vance',                         opt: 'Marcus Vance (Licensed MFT — Career Crossroads, Life Transitions)',        card: 'counsellor-card-marcus', track: 'Career Guidance' },
+      elena:  { name: 'Elena Rodriguez',                      opt: 'Elena Rodriguez (LCSW — Anxiety, Somatic Grounding, Sleep Wellness)',      card: 'counsellor-card-elena',  track: 'Anxiety & Mental Wellbeing' },
+      auto:   { name: 'First Available / Match Me Automatically', opt: 'First Available / Match Me Automatically', card: null, track: '' }
+    };
+    const cSelect = document.getElementById('counsellorSelect');
+    const cText   = document.getElementById('selectedCounsellorText');
+    const cBadge  = document.getElementById('counsellorBadgeNote');
+    const chips   = document.querySelectorAll('.counsellor-chip');
+    const trackEl = document.getElementById('type');
+    const pickCounsellor = (key, scroll = false) => {
+      const info = cMap[key] || cMap.auto;
+      if (cSelect) cSelect.value = info.opt;
+      if (cText)   cText.textContent = info.name;
+      if (cBadge)  cBadge.textContent = key === 'auto' ? 'Personalized match' : 'Selected: ' + info.name;
+      chips.forEach(c => c.classList.toggle('active', c.dataset.val === key));
+      ['sarah','marcus','elena'].forEach(k => {
+        const el = document.getElementById(cMap[k].card);
+        if (el) el.classList.toggle('selected-counsellor', k === key);
+      });
+      if (info.track && trackEl && !trackEl.value) trackEl.value = info.track;
+      if (scroll) {
+        document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
+        const fc = document.querySelector('.form-card');
+        if (fc) { fc.style.boxShadow = '0 0 0 3px steelblue'; setTimeout(() => fc.style.boxShadow = '', 1100); }
+      }
+    };
+    document.querySelectorAll('.c-select-btn').forEach(btn => {
+      btn.addEventListener('click', e => { e.preventDefault(); pickCounsellor(btn.dataset.counsellor, true); });
+    });
+    chips.forEach(c => c.addEventListener('click', () => pickCounsellor(c.dataset.val, false)));
+    cSelect?.addEventListener('change', () => {
+      let matched = 'auto';
+      for (const [k, v] of Object.entries(cMap)) { if (v.opt === cSelect.value) { matched = k; break; } }
+      pickCounsellor(matched, false);
+    });
+    // 5. Weekday check
+    const dateInput = document.getElementById('date');
+    const dateErr   = document.getElementById('dateErr');
+    const isWeekday = () => {
+      if (!dateInput?.value) return true;
+      const [y, m, d] = dateInput.value.split('-').map(Number);
+      const dow = new Date(y, m - 1, d).getDay();
+      const bad = dow === 0 || dow === 6;
+      dateInput.classList.toggle('error', bad);
+      if (dateErr) dateErr.style.display = bad ? 'block' : 'none';
+      return !bad;
+    };
+    dateInput?.addEventListener('input', isWeekday);
+    dateInput?.addEventListener('change', isWeekday);
+    // 6. Form validation & submission
+    const form      = document.getElementById('bookForm');
+    const formBox   = document.getElementById('formBox');
+    const successBox = document.getElementById('successBox');
+    const showErr = (id, show) => {
+      const e = document.getElementById(id + 'Err'), i = document.getElementById(id);
+      if (e) e.style.display = show ? 'block' : 'none';
+      if (i) i.classList.toggle('error', show);
+    };
+    ['name','email','phone','type','date','time'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input',  () => showErr(id, false));
+      document.getElementById(id)?.addEventListener('change', () => showErr(id, false));
+    });
+    form?.addEventListener('submit', e => {
+      e.preventDefault();
+      const name  = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const type  = document.getElementById('type').value;
+      const date  = document.getElementById('date').value;
+      const time  = document.getElementById('time').value;
+      const cVal  = cSelect ? cSelect.value : '';
+      let clean   = 'First Available Match';
+      if (cVal.includes('Dr. Sarah'))  clean = 'Dr. Sarah Jenkins';
+      else if (cVal.includes('Marcus')) clean = 'Marcus Vance';
+      else if (cVal.includes('Elena'))  clean = 'Elena Rodriguez';
+      let ok = true;
+      if (name.length < 2)                              { showErr('name', true);  ok = false; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))   { showErr('email', true); ok = false; }
+      if (phone.replace(/\D/g,'').length < 7)           { showErr('phone', true); ok = false; }
+      if (!type)                                        { showErr('type', true);  ok = false; }
+      if (!date || !isWeekday())                        { showErr('date', true);  ok = false; }
+      if (!time)                                        { showErr('time', true);  ok = false; }
+      if (!ok) return;
+      document.getElementById('sumRef').textContent        = 'MC-' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('sumName').textContent       = name;
+      document.getElementById('sumCounsellor').textContent = clean;
+      document.getElementById('sumType').textContent       = type;
+      document.getElementById('sumDate').textContent       = date + ' at ' + time;
+      formBox.style.display = 'none';
+      successBox.classList.add('active');
+      successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    document.getElementById('resetBtn')?.addEventListener('click', () => {
+      form.reset(); pickCounsellor('auto', false);
+      successBox.classList.remove('active'); formBox.style.display = 'block';
+    });
+    // 7. FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const btn = item.querySelector('.faq-q');
+      const ans = item.querySelector('.faq-a');
+      btn.addEventListener('click', () => {
+        const was = item.classList.contains('active');
+        document.querySelectorAll('.faq-item').forEach(o => {
+          o.classList.remove('active'); o.querySelector('.faq-a').style.maxHeight = null;
+        });
+        if (!was) { item.classList.add('active'); ans.style.maxHeight = ans.scrollHeight + 'px'; }
+      });
+    });
+    // 8. Scroll fade-in
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+  });
+</script>
+</body>
+</html>
